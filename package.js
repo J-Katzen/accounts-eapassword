@@ -1,5 +1,5 @@
 Package.describe({
-    name: "jkatzen:accounts-EAPassword",
+    name: "jkatzen:accounts-eapassword",
     summary: "Lets a user add another password to their account for external
     management by a differnet person.",
     version: "0.5",
