@@ -2,7 +2,7 @@ Package.describe({
     name: "jkatzen:accounts-eapassword",
     summary: "Lets a user add another password to their account for external by a differnet person.",
     version: "0.5.0",
-    git: 'https://github.com/J-Katzen/accounts-EAPassword'
+    git: 'https://github.com/J-Katzen/accounts-eapassword'
 })
 
 Package.on_use(function(api) {
