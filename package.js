@@ -7,13 +7,13 @@ Package.describe({
 
 Package.on_use(function(api) {
     api.use('npm-bcrypt@=0.7.7', 'server');
-    api.use('accounts-base', ['client', 'server']);
-    api.use('sha', ['client', 'server']);
-    api.use('email', ['server']);
-    api.use('random', ['server']);
-    api.use('check');
-    api.use('underscore');
-    api.use('ddp', ['client', 'server']);
+    api.use('accounts-base@=1.1.2', ['client', 'server']);
+    api.use('sha@=1.0.1', ['client', 'server']);
+    api.use('email@=1.0.4', ['server']);
+    api.use('random@=1.0.1', ['server']);
+    api.use('check@=1.0.2');
+    api.use('underscore@=1.0.1');
+    api.use('ddp@=1.0.12', ['client', 'server']);
 
     api.addFiles('EAPassword_server.js', 'server');
     api.addFiles('EAPassword_client.js', 'client');
