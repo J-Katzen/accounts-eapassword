@@ -1,4 +1,4 @@
-var bcrypt = NpmModuleBCrypt;
+var bcrypt = NpmModuleBcrypt;
 var bcryptHash = Meteor.wrapAsync(bcrypt.hash);
 var bcryptCompare = Meteor.wrapAsync(bcrypt.compare);
 
@@ -24,12 +24,12 @@ var hashPassword = function (password) {
 
 Accounts._checkEAPassword = function(user, EAEmail, password) {
     var result = {
-        userId: user._id;
+        userId: user._id
     };
 
     password = getPasswordString(password);
 
-    if(!bcryptCompare(password, user.service.EAPassword.bcrypt)) {
+    if(!bcryptCompare(password, user.services.EAPassword.bcrypt)) {
         result.error = new Meteor.Error(403, "Incorrect password");
     }
 
@@ -121,7 +121,7 @@ Meteor.methods({changeEAPassword: function(oldPassword, newPassword) {
      !user.services.EAPassword.bcrypt)
         throw new Meteor.Error(403, "User has no EAPassword set");
 
-    var result = checkPassword(user, oldPassword);
+    var result = checkPassword(user, user.managedByEA.email, oldPassword);
     if(result.error)
         throw result.error;
 
@@ -143,7 +143,7 @@ Accounts.setEAPassword = function(userId, newPlaintextPassword) {
 var createEALogin = function(userId, options) {
     check(options, Match.ObjectIncluding({
         EAEmail: String,
-        EAPassword: String
+        EAPassword: passwordValidator
     }));
     var email = options.EAEmail;
     if(!email)
@@ -154,7 +154,15 @@ var createEALogin = function(userId, options) {
         throw new Meteor.Error(403, "User not found");
 
     var hashed = hashPassword(options.EAPassword);
-    return Meteor.users.update({_id: userId}, {$set: {'services.EAPassword.bcrypt': hashed}});;
+    return Meteor.users.update({_id: userId}, {
+        $set: {
+            'services.EAPassword.bcrypt': hashed,
+            managedByEA: {
+                email: options.EAEmail,
+                grantedDate: new Date
+            }
+        }
+    });
 };
 
 Meteor.methods({createEALogin: function(options) {
