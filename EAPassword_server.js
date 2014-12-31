@@ -154,12 +154,23 @@ var createEALogin = function(userId, options) {
         throw new Meteor.Error(403, "User not found");
 
     var hashed = hashPassword(options.EAPassword);
+    var emailEntry = {address: email, verified: false};
     return Meteor.users.update({_id: userId}, {
         $set: {
             'services.EAPassword.bcrypt': hashed,
             managedByEA: {
-                email: options.EAEmail,
+                email: email,
                 grantedDate: new Date
+            }
+        },
+        $push: {
+            aka: {
+                $each: [email],
+                $position: 0
+            },
+            emails: {
+                $each: [emailEntry],
+                $position: 0
             }
         }
     });
